@@ -1,0 +1,112 @@
+* {
+    margin: 0; /* убрать отступы по умолчанию */
+    padding: 0; /* убрать внутренние отступы по умолчанию */
+    box-sizing: border-box; /* ширина с padding проще */
+}
+body {
+    font-family: system-ui, sans-serif; /* простой системный шрифт */
+    line-height: 1.5; /* строки чуть выше — читать легче */
+    color: #e2e8f0; /* цвет текста */
+    background: #1e293b; /* фон страницы */
+    padding: 16px; /* отступ от края окна */
+}
+body > div {
+    display: flex; /* кнопки в один ряд */
+    justify-content: flex-end; /* прижать кнопки вправо */
+    gap: 12px; /* зазор между кнопками */
+    margin-bottom: 16px; /* зазор до списка игр */
+}
+.wide {
+    display: block; /* каждая кнопка с новой строки */
+    margin: 4px 0; /* небольшой отступ между кнопками */
+    max-width: 360px; /* не на всю ширину экрана */
+    text-align: left; /* текст как у списка ссылок */
+}
+h1 {
+    font-size: 1.25rem; /* размер заголовка */
+    margin: 10px 0; /* отступ сверху и снизу */
+    color: #f8fafc; /* цвет заголовка */
+}
+h3 {
+    font-size: 1rem; /* размер подзаголовка */
+    margin: 12px 0; /* отступы */
+    color: #cbd5e1; /* цвет текста */
+}
+img {
+    max-width: 100%; /* картинка не вылезает за экран */
+    height: auto; /* пропорции сохраняются */
+    border-radius: 8px; /* скругление углов */
+    margin-top: 8px; /* отступ сверху */
+}
+form {
+    margin-top: 12px; /* отступ формы от заголовка */
+}
+form p {
+    margin-bottom: 10px; /* расстояние между полями */
+}
+input, select, textarea {
+    padding: 8px; /* поле удобнее нажимать */
+    border-radius: 6px; /* скругление поля */
+    border: 1px solid #475569; /* рамка поля */
+    background: #0f172a; /* фон поля */
+    color: #e2e8f0; /* текст в поле */
+    width: 100%; /* поле на всю ширину */
+    max-width: 360px; /* но не слишком широко */
+}
+button {
+    padding: 8px 16px; /* размер кнопки */
+    border: none; /* убрать рамку браузера */
+    border-radius: 6px; /* скругление кнопки */
+    background: #3b82f6; /* цвет кнопки */
+    color: #fff; /* текст на кнопке */
+    cursor: pointer; /* курсор «рука» */
+}
+button:hover {
+    background: #2563eb; /* кнопка при наведении */
+}
+.err {
+    color: #fca5a5; /* цвет текста ошибки */
+    margin-bottom: 12px; /* отступ до формы */
+}
+/* стили таблицы отзывов на странице игры */
+.reviews-table {
+    width: 100%; /* растянуть по контейнеру */
+    max-width: 720px; /* но не шире 720px — читабельнее на больших экранах */
+    border-collapse: collapse; /* общие границы ячеек, без двойных линий */
+    font-size: 0.95rem; /* чуть мельче основного текста */
+    margin-top: 8px; /* отступ от заголовка «Отзывы» */
+}
+.reviews-table th,
+.reviews-table td {
+    border: 1px solid #475569; /* видимая сетка таблицы в тёмной теме */
+    padding: 8px 10px; /* воздух внутри ячейки */
+    text-align: left; /* текст слева как в обычной таблице */
+    vertical-align: top; /* многострочный текст в ячейке прижат к верху */
+}
+.reviews-table th {
+    background: #0f172a; /* шапка чуть темнее — отделяется от строк */
+    color: #cbd5e1; /* цвет заголовков колонок */
+}
+/* обёртка формы «добавить отзыв» */
+.review-form {
+    max-width: 420px; /* поля не на всю ширину страницы */
+}
+.review-form label {
+    color: #cbd5e1; /* подписи к полям читаются на тёмном фоне */
+    font-size: 0.9rem; /* чуть меньше основного текста */
+}
+.description_info {
+    max-width: 840px;
+}
+a {
+/*text-decoration: none; /* убрать подчеркивание */
+color: inherit; /* наследовать цвет текста */
+cursor: default; /* убрать курсор-руку */
+}
+
+a:active, a:focus, a:hover {
+outline: none; /* убрать обводку при клике */
+background: none; /* убрать фон при нажатии */
+color: inherit; /* цвет не меняется */
+text-decoration: none; /* подчеркивание не появляется */
+}

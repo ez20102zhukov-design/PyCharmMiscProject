@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GameNews</title>
+    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
+</head>
+<body>
+{% for game in games %}
+<img src="{{game.image_url.url}}" alt="" style = "max-width: 250px; max-height: 250px">
+<br><a href="/gamedetail/{{game.id}}">{{game.title}}</a>
+<br>
+<br>
+{%endfor%}
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GameNews=>{{game.title}}</title>
+    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
+</head>
+<body>
+<img src="{{game.image_url.url}}" alt="" style = "max-width: 250px; max-height: 250px">
+<br><a href="{{game.steam_url}}">{{game.title}}</a>
+<h1>Game rating: <br>{{game.rating}}/10</h1>
+<div class="description_info">
+    <h1>Discription: <br>{{game.description}}</h1>
+</div>
+
+
+<h1>Release date: <br>{{game.release}}</h1>
+</body>
+</html>
