@@ -1,9 +1,11 @@
 from __future__ import annotations
 import re
 import os
-import app_data
+from pathlib import Path
 import requests
 from deep_translator import GoogleTranslator, single_detection
+
+_MEDIA_IMAGES_DIR = Path(__file__).resolve().parent.parent / "media" / "images"
 
 
 def translate_to_russian_if_needed(text):
@@ -24,18 +26,6 @@ def translate_to_russian_if_needed(text):
         return text
 
 
-
-def get_steam_game_data(store_url: str, download_images: bool = True, images_dir: str = "images") -> dict:
-
-    game = app_data[str(app_id)]["data"]
-
-    name = game.get("name", "Unknown")
-    short_description = game.get("short_description")
-    header_image = game.get("header_image")
-    store_link = f"https://store.steampowered.com/app/{app_id}"
-
-    if short_description:
-        short_description = translate_to_russian_if_needed(short_description)
 def sanitize_filename(filename: str) -> str:
     """Удаляет из строки символы, недопустимые в именах файлов."""
     return re.sub(r'[<>:"/\\|?*]', '', filename).strip()
@@ -140,19 +130,23 @@ def get_steam_game_data(store_url: str, download_images: bool = True, images_dir
     if download_images and header_image:
         safe_name = sanitize_filename(name.replace(' ', '_'))
         filename = f"{app_id}_{safe_name}.jpg"
-        #save_path = os.path.join(images_dir, filename)
-        save_path = f"C:\\Users\\Gaming\\PyCharmMiscProject\\media\\images\\{filename}"
+        base_dir = Path(images_dir) if images_dir != "images" else _MEDIA_IMAGES_DIR
+        save_path = str(base_dir / filename)
         success = download_image(header_image, save_path)
         if success:
             local_image_path = save_path
 
+    # Для админки и JSON: HTTPS URL Steam CDN (превью + скачивание при Save).
+    # Локальный путь с другой машины в браузере не работает.
+    image_for_form = header_image or ""
+
     result = {
         "title": name,
-        "rating": int(rating_out_of_10),
+        "rating": int(rating_out_of_10 or 0),
         "release": release_date,
         "description": short_description,
         "steam_url": store_link,
-        "image_url": local_image_path,
+        "image_url": image_for_form,
        #"local_image_path": ,
        #"store_link": store_link,
        #"positive_review_percent": positive_percent,
