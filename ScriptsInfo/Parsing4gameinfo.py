@@ -78,12 +78,20 @@ def convert_percent_to_rating(percent: float | None) -> float | None:
         return None
     return round((percent / 100) * 10, 1)
 
-def get_steam_game_data(store_url: str, download_images: bool = True, images_dir: str = "images") -> dict:
-
+def steam_link_handler(store_url):
     try:
         app_id = store_url.split('/app/')[1].split('/')[0]
+        return app_id
     except (IndexError, AttributeError):
         return {"error": "Неверный формат ссылки"}
+
+def get_steam_game_data(store_url: str, download_images: bool = True, images_dir: str = "images") -> dict:
+
+    app_id = steam_link_handler(store_url)
+   #try:
+   #    app_id = store_url.split('/app/')[1].split('/')[0]
+   #except (IndexError, AttributeError):
+   #    return {"error": "Неверный формат ссылки"}
 
     app_url = f"https://store.steampowered.com/api/appdetails?appids={app_id}&l=russian"
     try:

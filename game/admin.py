@@ -67,6 +67,17 @@ class GameInfoForm(forms.ModelForm):
     class Media:
         js = ("js/GameAdmin.js",)
 
+    def clean_steam_url(self):
+        steam_url = self.cleaned_data.get("steam_url")
+        if not steam_url:
+            return steam_url
+        coreset = GameInfo.objects.filter(steam_url=steam_url)
+        if self.instance.pk:
+            coreset = coreset.exclude(pk=self.instance.pk)
+        if coreset.exists():
+            raise forms.ValidationError(f"АЩИПКА, ЕСТЬ ИГРА ID={coreset.first().pk}")
+        return steam_url
+
 @admin.register(GameInfo,)
 class GameInfoAdmin(admin.ModelAdmin):
     form = GameInfoForm
