@@ -1,112 +1,523 @@
-* {
-    margin: 0; /* убрать отступы по умолчанию */
-    padding: 0; /* убрать внутренние отступы по умолчанию */
-    box-sizing: border-box; /* ширина с padding проще */
-}
-body {
-    font-family: system-ui, sans-serif; /* простой системный шрифт */
-    line-height: 1.5; /* строки чуть выше — читать легче */
-    color: #e2e8f0; /* цвет текста */
-    background: #1e293b; /* фон страницы */
-    padding: 16px; /* отступ от края окна */
-}
-body > div {
-    display: flex; /* кнопки в один ряд */
-    justify-content: flex-end; /* прижать кнопки вправо */
-    gap: 12px; /* зазор между кнопками */
-    margin-bottom: 16px; /* зазор до списка игр */
-}
-.wide {
-    display: block; /* каждая кнопка с новой строки */
-    margin: 4px 0; /* небольшой отступ между кнопками */
-    max-width: 360px; /* не на всю ширину экрана */
-    text-align: left; /* текст как у списка ссылок */
-}
-h1 {
-    font-size: 1.25rem; /* размер заголовка */
-    margin: 10px 0; /* отступ сверху и снизу */
-    color: #f8fafc; /* цвет заголовка */
-}
-h3 {
-    font-size: 1rem; /* размер подзаголовка */
-    margin: 12px 0; /* отступы */
-    color: #cbd5e1; /* цвет текста */
-}
-img {
-    max-width: 100%; /* картинка не вылезает за экран */
-    height: auto; /* пропорции сохраняются */
-    border-radius: 8px; /* скругление углов */
-    margin-top: 8px; /* отступ сверху */
-}
-form {
-    margin-top: 12px; /* отступ формы от заголовка */
-}
-form p {
-    margin-bottom: 10px; /* расстояние между полями */
-}
-input, select, textarea {
-    padding: 8px; /* поле удобнее нажимать */
-    border-radius: 6px; /* скругление поля */
-    border: 1px solid #475569; /* рамка поля */
-    background: #0f172a; /* фон поля */
-    color: #e2e8f0; /* текст в поле */
-    width: 100%; /* поле на всю ширину */
-    max-width: 360px; /* но не слишком широко */
-}
-button {
-    padding: 8px 16px; /* размер кнопки */
-    border: none; /* убрать рамку браузера */
-    border-radius: 6px; /* скругление кнопки */
-    background: #3b82f6; /* цвет кнопки */
-    color: #fff; /* текст на кнопке */
-    cursor: pointer; /* курсор «рука» */
-}
-button:hover {
-    background: #2563eb; /* кнопка при наведении */
-}
-.err {
-    color: #fca5a5; /* цвет текста ошибки */
-    margin-bottom: 12px; /* отступ до формы */
-}
-/* стили таблицы отзывов на странице игры */
-.reviews-table {
-    width: 100%; /* растянуть по контейнеру */
-    max-width: 720px; /* но не шире 720px — читабельнее на больших экранах */
-    border-collapse: collapse; /* общие границы ячеек, без двойных линий */
-    font-size: 0.95rem; /* чуть мельче основного текста */
-    margin-top: 8px; /* отступ от заголовка «Отзывы» */
-}
-.reviews-table th,
-.reviews-table td {
-    border: 1px solid #475569; /* видимая сетка таблицы в тёмной теме */
-    padding: 8px 10px; /* воздух внутри ячейки */
-    text-align: left; /* текст слева как в обычной таблице */
-    vertical-align: top; /* многострочный текст в ячейке прижат к верху */
-}
-.reviews-table th {
-    background: #0f172a; /* шапка чуть темнее — отделяется от строк */
-    color: #cbd5e1; /* цвет заголовков колонок */
-}
-/* обёртка формы «добавить отзыв» */
-.review-form {
-    max-width: 420px; /* поля не на всю ширину страницы */
-}
-.review-form label {
-    color: #cbd5e1; /* подписи к полям читаются на тёмном фоне */
-    font-size: 0.9rem; /* чуть меньше основного текста */
-}
-.description_info {
-    max-width: 840px;
-}
-a {
-/*text-decoration: none; /* убрать подчеркивание */
-color: inherit; /* наследовать цвет текста */
-cursor: default; /* убрать курсор-руку */
+/* Design tokens — единая стилистика всех страниц (тёмный маркетплейс) */
+:root {
+    --bg-page: #0b111b;
+    --bg-elevated: #111827;
+    --bg-card: #0f1623;
+    --bg-input: #0b111b;
+    --border-subtle: #1e293b;
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-glow: rgba(59, 130, 246, 0.35);
+    --danger: #f87171;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --gap: 20px;
+    --header-h: 64px;
+    --container-max: 1320px;
 }
 
-a:active, a:focus, a:hover {
-outline: none; /* убрать обводку при клике */
-background: none; /* убрать фон при нажатии */
-color: inherit; /* цвет не меняется */
-text-decoration: none; /* подчеркивание не появляется */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--bg-page);
+    min-height: 100vh;
+    padding-top: var(--header-h);
+    -webkit-font-smoothing: antialiased;
+    color-scheme: dark;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--header-h);
+    background: rgba(11, 17, 27, 0.94);
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(12px);
+}
+
+.site-header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-logo {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.site-logo:hover {
+    color: var(--accent-hover);
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.site-nav a {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.site-nav a:hover {
+    color: var(--text-primary);
+}
+
+.main-content {
+    padding-top: 28px;
+    padding-bottom: 48px;
+}
+
+/* Секции и заголовки блоков */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--gap);
+    letter-spacing: -0.02em;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.page-lead {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    margin-bottom: 28px;
+}
+
+/* Сетка карточек (как «лидеры продаж») */
+.product-grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+}
+
+@media (min-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.product-grid__empty {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.product-card:hover {
+    border-color: #334155;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+
+.product-card__media {
+    display: block;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    overflow: hidden;
+    margin: -12px -12px 12px -12px;
+    width: calc(100% + 24px);
+    aspect-ratio: 1 / 1;
+    background: var(--bg-elevated);
+}
+
+.product-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    border-radius: 0;
+}
+
+.product-card__price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.product-card__title {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.35;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.product-card__title a:hover {
+    color: var(--accent-hover);
+}
+
+.product-card__stats {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+
+.product-card .btn {
+    margin-top: auto;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 11px 16px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+}
+
+.btn--primary {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    text-transform: none;
+}
+
+.btn--primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 0 24px var(--accent-glow);
+}
+
+.btn--primary:active {
+    transform: translateY(1px);
+}
+
+.btn--secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+}
+
+.btn--secondary:hover {
+    border-color: #475569;
+    background: #1e293b;
+}
+
+button.btn {
+    width: 100%;
+    max-width: 360px;
+}
+
+.auth-card .btn {
+    max-width: none;
+}
+
+/* Страница игры */
+.detail-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+}
+
+.detail-layout {
+    display: grid;
+    gap: 32px;
+    align-items: start;
+}
+
+@media (min-width: 768px) {
+    .detail-layout {
+        grid-template-columns: minmax(240px, 360px) 1fr;
+    }
+}
+
+.detail-cover {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    aspect-ratio: 1 / 1;
+}
+
+.detail-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+}
+
+.detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 20px;
+}
+
+.detail-pill {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    background: var(--bg-elevated);
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+}
+
+.detail-description {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 720px;
+    margin-bottom: 24px;
+}
+
+.detail-description h2,
+.detail-panel h2 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+}
+
+.detail-actions .btn {
+    width: 100%;
+    max-width: none;
+}
+
+/* Регистрация */
+.auth-card {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+.auth-card h1 {
+    font-size: 1.375rem;
+    margin-bottom: 8px;
+}
+
+.auth-card .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+}
+
+.form-row {
+    margin-bottom: 18px;
+}
+
+.form-actions {
+    margin-top: 20px;
+}
+
+.form-row label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+form {
+    margin-top: 0;
+}
+
+form p {
+    margin-bottom: 10px;
+}
+
+input,
+select,
+textarea {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    width: 100%;
+    max-width: 100%;
+    font-family: inherit;
+    font-size: 0.9375rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+small.form-text,
+.form-text.text-muted {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+.err {
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: rgba(248, 81, 73, 0.1);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(248, 81, 73, 0.25);
+}
+
+.errorlist {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    font-size: 0.8125rem;
+    color: var(--danger);
+}
+
+.errorlist li {
+    margin-top: 4px;
+}
+
+/* Таблица отзывов (если появится на странице) */
+.reviews-table {
+    width: 100%;
+    max-width: 720px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-top: 8px;
+}
+
+.reviews-table th,
+.reviews-table td {
+    border: 1px solid var(--border-subtle);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.reviews-table th {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+.review-form {
+    max-width: 420px;
+}
+
+.review-form label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Общие ссылки в контенте */
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+.product-card__title a:hover {
+    text-decoration: none;
+}
+
+.site-logo,
+.site-nav a,
+.btn {
+    text-decoration: none;
+}
+
+.site-logo:hover,
+.site-nav a:hover,
+.btn:hover {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 1.25rem;
+    margin: 10px 0;
+    color: var(--text-primary);
+}
+
+h3 {
+    font-size: 1rem;
+    margin: 12px 0;
+    color: var(--text-secondary);
+}
+
+.description_info {
+    max-width: 840px;
 }

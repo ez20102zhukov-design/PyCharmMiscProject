@@ -1,29 +1,38 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-
-    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
-</head>
-<body>
-    <h1>REGISTRATION</h1>
-{%if form.errors%}
-    <p class="err">{{form.errors}}</p>
-{%endif%}
-<form method="post">
-    {% csrf_token %}
-    {{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}
-    {{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}
-    <br>
-    <br>
-    {{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}
-    <br>
-    <br>
-    {{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}
-    <small class="form-text text-muted">{{ form.password1.help_text }}</small>
-    <button type="submit">Register</button>
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Регистрация — GameHub{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <h1>Регистрация</h1>
+    <p class="subtitle">Создайте аккаунт, чтобы пользоваться каталогом.</p>
+    {% if form.errors %}
+    <p class="err">{{ form.errors }}</p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+        <div class="form-row">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+        <div class="form-row">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+        <div class="form-row">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+        <small class="form-text text-muted">{{ form.password1.help_text }}</small>
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary">Зарегистрироваться</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

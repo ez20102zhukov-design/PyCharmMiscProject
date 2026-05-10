@@ -1,17 +1,22 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>GameNews</title>
-    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
-</head>
-<body>
-{% for game in games %}
-<img src="{{game.image_url.url}}" alt="" style = "max-width: 250px; max-height: 250px">
-<br><a href="/gamedetail/{{game.id}}">{{game.title}}</a>
-<br>
-<br>
-{%endfor%}
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Каталог игр — GameHub{% endblock %}
+{% block content %}
+<h1 class="section-title">Каталог игр</h1>
+<div class="product-grid">
+    {% for game in games %}
+    <article class="product-card">
+        <a href="/gamedetail/{{ game.id }}/" class="product-card__media">
+            <img src="{{ game.image_url.url }}" alt="{{ game.title }}">
+        </a>
+        <p class="product-card__price">★ {{ game.rating }}/10</p>
+        <h2 class="product-card__title">
+            <a href="/gamedetail/{{ game.id }}/">{{ game.title }}</a>
+        </h2>
+        <p class="product-card__stats">Релиз: {{ game.release|date:"d.m.Y" }}</p>
+        <a href="/gamedetail/{{ game.id }}/" class="btn btn--primary">Подробнее</a>
+    </article>
+    {% empty %}
+    <p class="page-lead product-grid__empty">Пока нет игр в каталоге.</p>
+    {% endfor %}
+</div>
+{% endblock %}

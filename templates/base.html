@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}GameHub{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="site-header__inner container">
+        <a href="/" class="site-logo">GameHub</a>
+        <nav class="site-nav" aria-label="Основная навигация">
+            <a href="/">Каталог</a>
+            <a href="{% url 'register' %}">Регистрация</a>
+        </nav>
+    </div>
+</header>
+<main class="main-content container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>
