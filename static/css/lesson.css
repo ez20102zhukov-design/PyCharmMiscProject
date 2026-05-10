@@ -521,3 +521,41 @@ h3 {
 .description_info {
     max-width: 840px;
 }
+
+.product-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    background: var(--bg-elevated);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.product-card__stats--clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap);
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.pagination__status {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.detail-body {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    max-width: 720px;
+}

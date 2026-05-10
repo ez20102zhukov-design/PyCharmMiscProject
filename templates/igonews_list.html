@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Новости — GameHub{% endblock %}
+{% block content %}
+<h1 class="section-title">Новости Игромании</h1>
+<p class="page-lead">Материалы подтягиваются из админки (синхронизация или импорт по ссылке).</p>
+
+<div class="product-grid">
+    {% for article in page_obj %}
+    <article class="product-card">
+        <a href="{{ article.get_absolute_url }}" class="product-card__media">
+            {% if article.display_image_url %}
+            <img src="{{ article.display_image_url }}" alt="{{ article.title }}" loading="lazy">
+            {% else %}
+            <div class="product-card__placeholder">Нет обложки</div>
+            {% endif %}
+        </a>
+        {% if article.release_date %}
+        <p class="product-card__price">{{ article.release_date|date:"d.m.Y" }}</p>
+        {% endif %}
+        <h2 class="product-card__title">
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        </h2>
+        <p class="product-card__stats product-card__stats--clamp">{{ article.description|truncatewords:28 }}</p>
+        <a href="{{ article.get_absolute_url }}" class="btn btn--primary">Читать</a>
+    </article>
+    {% empty %}
+    <p class="page-lead product-grid__empty">Новостей пока нет. Откройте <a href="/admin/igonews/igromaniaarticle/">админку</a> и выполните «Синхронизировать ленту».</p>
+    {% endfor %}
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Страницы">
+    {% if page_obj.has_previous %}
+    <a class="btn btn--secondary" href="?page={{ page_obj.previous_page_number }}">← Назад</a>
+    {% endif %}
+    <span class="pagination__status">Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a class="btn btn--secondary" href="?page={{ page_obj.next_page_number }}">Вперёд →</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

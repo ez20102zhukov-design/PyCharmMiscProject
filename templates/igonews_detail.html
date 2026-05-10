@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — Новости — GameHub{% endblock %}
+{% block content %}
+<p class="page-lead"><a href="{% url 'igonews_list' %}">← Все новости</a></p>
+<h1 class="page-title">{{ article.title }}</h1>
+<div class="detail-layout">
+    <div class="detail-cover">
+        {% if article.display_image_url %}
+        <img src="{{ article.display_image_url }}" alt="{{ article.title }}">
+        {% endif %}
+    </div>
+    <div class="detail-panel">
+        <div class="detail-meta">
+            {% if article.release_date %}
+            <span class="detail-pill">{{ article.release_date|date:"d.m.Y" }}</span>
+            {% endif %}
+            <span class="detail-pill">Игромания · id {{ article.igromania_id }}</span>
+        </div>
+        <div class="detail-description">
+            <h2>Текст</h2>
+            <div class="detail-body">{{ article.description|linebreaksbr }}</div>
+        </div>
+        <div class="detail-actions">
+            <a class="btn btn--primary" href="{{ article.source_url }}" target="_blank" rel="noopener noreferrer">На сайте Игромании</a>
+            <a class="btn btn--secondary" href="{% url 'igonews_list' %}">К списку новостей</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
