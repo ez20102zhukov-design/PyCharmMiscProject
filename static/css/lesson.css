@@ -159,14 +159,14 @@ body {
     overflow: hidden;
     margin: -12px -12px 12px -12px;
     width: calc(100% + 24px);
-    aspect-ratio: 1 / 1;
+    /*aspect-ratio: 1 / 1;*/
     background: var(--bg-elevated);
 }
 
 .product-card__media img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     margin: 0;
     border-radius: 0;
@@ -292,7 +292,7 @@ button.btn {
     overflow: hidden;
     background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
-    aspect-ratio: 1 / 1;
+    /*aspect-ratio: 1 / 1;*/
 }
 
 .detail-cover img {

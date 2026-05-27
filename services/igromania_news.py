@@ -116,6 +116,53 @@ def normalize_list_item(item: dict[str, Any]) -> dict[str, Any]:
         "article_url": url,
     }
 
+import re
+def clean_text(text: str) -> str:
+    """
+    Удаляет из текста:
+    - HTML/XML комментарии <!-- ... -->
+    - Markdown ссылки [текст](url) → текст
+    - Markdown жирность **текст** или __текст__ → текст
+    - Markdown курсив *текст* или _текст_ → текст
+    - Символы цитат > в начале строки
+    - Маркеры списков *, -, + в начале строки
+    - Лишние множественные пробелы
+    """
+    text = re.sub(r"https?://\S+", "", text)
+    text = re.sub(r"&nbsp;", " ", text)
+
+    # 1. Удаляем HTML-комментарии
+    text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
+
+    # 2. Обрабатываем ссылки [текст](url) → текст
+    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+
+    # 3. Жирность **текст** или __текст__
+    text = re.sub(r'\*\*([^\*]+)\*\*', r'\1', text)
+    text = re.sub(r'__([^_]+)__', r'\1', text)
+
+    # 4. Курсив *текст* или _текст_ (но не трогаем уже обработанную жирность)
+    text = re.sub(r'(?<!\*)\*([^\*]+)\*(?!\*)', r'\1', text)
+    text = re.sub(r'(?<!_)_([^_]+)_(?!_)', r'\1', text)
+
+    # 5. Удаляем символы цитат в начале строки (>, включая пробелы после)
+    text = re.sub(r'^\s*>\s*', '', text, flags=re.MULTILINE)
+
+    # 6. Удаляем маркеры списков (*, -, +) в начале строки
+    text = re.sub(r'^\s*[\*\-+]\s+', '', text, flags=re.MULTILINE)
+
+    # 7. Приводим множественные пробелы к одному (но сохраняем переводы строк)
+    text = re.sub(r'[ \t]+', ' ', text)
+    text = re.sub(r'\n\s*\n', '\n\n', text)  # убираем лишние пустые строки
+
+    # 8. Удаляем пробелы в начале и конце строк, но не трогаем отступы смысловые
+    lines = [line.strip() for line in text.split('\n')]
+    text = '\n'.join(lines)
+
+    # Финальная чистка: убираем возможные одиночные звёздочки/подчёркивания, оставшиеся после предыдущих шагов
+    text = re.sub(r'[*_]+', '', text)
+
+    return text.strip()
 
 def normalize_detail(payload: dict[str, Any]) -> dict[str, Any]:
     """Полный материал из GET /api/v3/news/{id}/."""
@@ -128,11 +175,12 @@ def normalize_detail(payload: dict[str, Any]) -> dict[str, Any]:
     snippet = (payload.get("snippet") or "").strip()
     description = body or snippet
     url = _article_url(int(news_id), slug) if news_id else ""
+
     return {
         "article_id": news_id,
         "slug": slug,
         "title": title,
-        "description": description,
+        "description": clean_text(description),
         "release": _release_from_pubdate(pubdate if isinstance(pubdate, str) else None),
         "image_url": pic,
         "article_url": url,

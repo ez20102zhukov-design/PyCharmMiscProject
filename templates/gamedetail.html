@@ -20,6 +20,62 @@
             <a class="btn btn--primary" href="{{ game.steam_url }}" target="_blank" rel="noopener noreferrer">Страница в Steam</a>
             <a class="btn btn--secondary" href="/">Вернуться в каталог</a>
         </div>
+        <table class="reviews-table">
+    <thead>
+    <tr>
+        <th>Кто</th>
+        <th>Когда</th>
+        <th>Оценка</th>
+        <th>Текст</th>
+    </tr>
+    </thead>
+    <tbody>
+    {# цикл по всем отзывам к этой игре (передали из view как reviews) #}
+    {% for r in reviews %}
+        <tr>
+            <td>{{ r.user.username }}</td> {# логин автора из модели User #}
+            <td>{{ r.created_at|date:"d.m.Y H:i" }}</td> {# фильтр date — формат день.месяц.год часы:минуты #}
+            <td>{{ r.rating }} / 10</td> {# число из поля rating #}
+            <td>{{ r.text|linebreaksbr }}</td> {# переносы строк в тексте превращаются в <br> #}
+        </tr>
+    {% empty %}
+        {# срабатывает, если список reviews пустой #}
+        <tr>
+            <td colspan="4">Пока пусто — добавь первый отзыв ниже.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{# форма только если залогинен и ещё нет отзыва (user_already_reviewed из view) #}
+{% if user.is_authenticated and user_already_reviewed %}
+    <p style="margin-top:20px;color:#cbd5e1">Ты уже оставил отзыв к этой игре — повторно отправить нельзя.</p>
+{% elif user.is_authenticated %}
+    <h3 style="margin-top:20px">Добавить отзыв</h3>
+    {# method=post — данные уходят в тот же URL, view различает GET и POST #}
+    <form method="post" class="review-form">
+        {% csrf_token %} {# скрытое поле защиты от подделки запроса с другого сайта #}
+        {% if form.non_field_errors %}
+            <p class="err">{{ form.non_field_errors }}</p> {# ошибки не привязанные к одному полю #}
+        {% endif %}
+        <p>
+            {# for связывает подпись с полем (id_rating генерирует Django для rating) #}
+            <label for="id_rating">Оценка (1–10)</label><br>
+            {{ form.rating }} {# виджет Select из ReviewForm #}
+            {% if form.rating.errors %}<span class="err">{{ form.rating.errors }}</span>{% endif %}
+        </p>
+        <p>
+            <label for="id_text">Текст</label><br>
+            {{ form.text }} {# Textarea #}
+            {% if form.text.errors %}<span class="err">{{ form.text.errors }}</span>{% endif %}
+        </p>
+        <button type="submit">Отправить</button> {# отправит POST на game_detail #}
+    </form>
+{% else %}
+    <p style="margin-top:16px">
+        <a href="/login" style="color:#93c5fd">Войди</a>, чтобы оставить отзыв.
+    </p>
+{% endif %}
     </div>
 </div>
 {% endblock %}
